@@ -187,3 +187,5 @@ As migrações de banco de dados são gerenciadas via Flyway e executadas automa
 ✅ Pronto para avaliação / entrega
 
 Projeto desenvolvido com foco em boas práticas, organização e clareza de código.
+
+- Ainda em desenvolvimento.
