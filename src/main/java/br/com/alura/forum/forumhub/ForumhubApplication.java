@@ -2,12 +2,13 @@ package br.com.alura.forum.forumhub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class ForumhubApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ForumhubApplication.class, args);
+		ConfigurableApplicationContext run = SpringApplication.run(ForumhubApplication.class, args);
 	}
 
 }
