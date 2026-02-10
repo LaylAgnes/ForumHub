@@ -60,25 +60,36 @@ src/
                         └── forumhub/
                             ├── ForumhubApplication.java
                             │
-                            ├── config/
-                            │   └── SecurityConfig.java
+                            ├── infra.security/
+                            │   ├── SecurityConfig.java
+                            │   ├── SecurityFilter.java
+                            │   └── TokenService.java
                             │
-                            └── topico/
-                                ├── Topico.java
-                                │
-                                ├── controller/
-                                │   └── TopicoController.java
-                                │
-                                ├── dto/
-                                │   ├── TopicoRequest.java
-                                │   ├── TopicoUpdateRequest.java
-                                │   └── TopicoResponse.java
-                                │
-                                ├── repository/
-                                │   └── TopicoRepository.java
-                                │
-                                └── service/
-                                    └── TopicoService.java
+                            ├── topico/
+                            │    ├── Topico.java
+                            │    │
+                            │    ├── controller/
+                            │    │   └── TopicoController.java
+                            │    │
+                            │    ├── dto/
+                            │    │   ├── TopicoRequest.java
+                            │    │   ├── TopicoUpdateRequest.java
+                            │    │   └── TopicoResponse.java
+                            │    │
+                            │    ├── repository/
+                            │    │   └── TopicoRepository.java
+                            │    │
+                            │    └── service/
+                            │        └── TopicoService.java
+                            └── usuario/
+                                    ├── AutenticacaoController.java
+                                    ├── DadosAutenticacao.java
+                                    ├── DadosTokenJWT.java
+                                    ├── Usuario.java
+                                    ├── UsuarioRepository.java
+                                    └── UsuarioService.java
+
+
 ```
 ---
 
