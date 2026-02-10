@@ -1,13 +1,15 @@
 package br.com.alura.forum.forumhub.infra.security;
 
+import br.com.alura.forum.forumhub.infra.security.TokenService;
 import br.com.alura.forum.forumhub.usuario.UsuarioRepository;
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,35 +18,44 @@ import java.io.IOException;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private final TokenService tokenService;
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private TokenService tokenService;
 
-    public SecurityFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
-        this.tokenService = tokenService;
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     protected void doFilterInternal(
-            @Nonnull HttpServletRequest request,
-            @Nonnull HttpServletResponse response,
-            @Nonnull FilterChain filterChain
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
     ) throws ServletException, IOException {
 
         String tokenJWT = recuperarToken(request);
 
         if (tokenJWT != null) {
-            String login = tokenService.getSubject(tokenJWT);
+            try {
+                String login = tokenService.getSubject(tokenJWT);
 
-            var usuario = usuarioRepository.findByLogin(login).orElseThrow();
+                var usuario = usuarioRepository.findByLogin(login)
+                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-            var authentication = new UsernamePasswordAuthenticationToken(
-                    usuario,
-                    null,
-                    usuario.getAuthorities()
-            );
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        usuario,                     // principal
+                        null,                        // credentials
+                        usuario.getAuthorities()     // authorities (OBRIGATÓRIO)
+                );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            } catch (Exception e) {
+                // Token inválido, expirado ou usuário inexistente
+                SecurityContextHolder.clearContext();
+            }
         }
 
         filterChain.doFilter(request, response);
@@ -54,7 +65,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.replace("Bearer ", "");
+            return authorizationHeader.replace("Bearer ", "").trim();
         }
 
         return null;
