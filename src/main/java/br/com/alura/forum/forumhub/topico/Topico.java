@@ -1,19 +1,27 @@
 package br.com.alura.forum.forumhub.topico;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @Table(name = "topicos")
 public class Topico {
 
+    // 🔹 GETTERS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 🔹 SETTERS (ESSENCIAIS PARA O PUT)
+    @Setter
     @Column(nullable = false)
     private String titulo;
 
+    @Setter
     @Column(nullable = false, columnDefinition = "TEXT")
     private String mensagem;
 
@@ -23,9 +31,11 @@ public class Topico {
     @Column(nullable = false)
     private String status;
 
+    @Setter
     @Column(nullable = false)
     private String autor;
 
+    @Setter
     @Column(nullable = false)
     private String curso;
 
@@ -43,49 +53,4 @@ public class Topico {
         this.dataCriacao = LocalDateTime.now();
     }
 
-    // 🔹 GETTERS
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
-
-    // 🔹 SETTERS (ESSENCIAIS PARA O PUT)
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
 }

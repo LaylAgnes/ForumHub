@@ -1,17 +1,20 @@
 package br.com.alura.forum.forumhub.topico.dto;
 
 import br.com.alura.forum.forumhub.topico.Topico;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class TopicoResponse {
 
-    private Long id;
-    private String titulo;
-    private String mensagem;
-    private LocalDateTime dataCriacao;
-    private String status;
-    private String autor;
-    private String curso;
+    private final Long id;
+    private final String titulo;
+    private final String mensagem;
+    private final LocalDateTime dataCriacao;
+    private final String status;
+    private final String autor;
+    private final String curso;
 
     public TopicoResponse(Topico topico) {
         this.id = topico.getId();
@@ -23,31 +26,4 @@ public class TopicoResponse {
         this.curso = topico.getCurso();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
 }

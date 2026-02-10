@@ -1,7 +1,9 @@
 package br.com.alura.forum.forumhub.topico.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
+@Getter
 public class TopicoUpdateRequest {
 
     @NotBlank
@@ -16,19 +18,4 @@ public class TopicoUpdateRequest {
     @NotBlank
     private String curso;
 
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
 }
