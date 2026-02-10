@@ -17,7 +17,7 @@ public class TopicoRequest {
     @NotBlank
     private String curso;
 
-    public TopicoRequest(String titulo) {
+    public TopicoRequest() {
         this.titulo = titulo;
     }
 }

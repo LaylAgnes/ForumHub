@@ -31,19 +31,26 @@ public class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        System.out.println("=== SECURITY FILTER ===");
+        System.out.println("Authorization header: " + request.getHeader("Authorization"));
+
         String tokenJWT = recuperarToken(request);
+        System.out.println("Token extraído: " + tokenJWT);
 
         if (tokenJWT != null) {
             try {
                 String login = tokenService.getSubject(tokenJWT);
+                System.out.println("Login do token: " + login);
 
                 var usuario = usuarioRepository.findByLogin(login)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+                System.out.println("Authorities do usuário: " + usuario.getAuthorities());
+
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        usuario,                     // principal
-                        null,                        // credentials
-                        usuario.getAuthorities()     // authorities (OBRIGATÓRIO)
+                        usuario,
+                        null,
+                        usuario.getAuthorities()
                 );
 
                 authentication.setDetails(
@@ -53,21 +60,30 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {
-                // Token inválido, expirado ou usuário inexistente
+                System.out.println("ERRO NO FILTRO: " + e.getMessage());
                 SecurityContextHolder.clearContext();
             }
         }
+
+        System.out.println(
+                "Authentication no contexto: "
+                        + SecurityContextHolder.getContext().getAuthentication()
+        );
 
         filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
+        String header = request.getHeader("Authorization");
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.replace("Bearer ", "").trim();
-        }
+        if (header == null) return null;
 
-        return null;
+        String[] parts = header.split(" ");
+
+        if (parts.length != 2) return null;
+
+        return parts[1].trim();
     }
+
+
 }

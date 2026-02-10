@@ -32,9 +32,11 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/topicos/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/topicos").hasRole("ADMIN")
+                        .requestMatchers("/topicos/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+
 
                 .addFilterBefore(
                         securityFilter,
